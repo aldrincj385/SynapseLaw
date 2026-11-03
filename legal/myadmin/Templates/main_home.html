@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SynapseLaw | AI-Powered Legal Document Analysis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <i class="fas fa-balance-scale"></i>
+                    SYNAPESLAW
+                </a>
+
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+
+                <!-- ✅ UPDATED: Simple profile button when logged in -->
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile_view' %}" class="cta-button" style="
+                        background: transparent;
+                        border: 1px solid #0e7eaa;
+                        color: #e0e1dd;
+                        text-decoration: none;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    ">
+                        <i class="fas fa-user-circle"></i>
+                        <span>{{ user.first_name|default:user.username }}</span>
+                    </a>
+                {% else %}
+                    <!-- User is not logged in - Show login/signup buttons -->
+                    <div style="display: flex; gap: 10px;">
+                        <a href="{% url 'login_view' %}" class="cta-button" style="background: transparent; border: 1px solid #0e7eaa;">
+                            Login
+                        </a>
+                        <a href="{% url 'register' %}" class="cta-button">
+                            Signup
+                        </a>
+                    </div>
+                {% endif %}
+
+                <div class="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>AI-Powered Legal Document Analysis</h1>
+                    <p>Upload contracts, agreements, or legal documents and get instant analysis, risk assessment, and recommendations using cutting-edge artificial intelligence.</p>
+
+                    <!-- Step 1 Guide -->
+                    <div style="background-color: rgba(14, 126, 170, 0.1); padding: 20px; border-radius: 10px; border-left: 4px solid #0e7eaa; margin-bottom: 25px;">
+                        <h3 style="color: #e0e1dd; margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                            <span style="background-color: #0e7eaa; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">1</span>
+                            Start Your Analysis - Upload Your Document
+                        </h3>
+                        <p style="color: #8d99ae; margin-bottom: 15px;">
+                            Click "Upload Document" below to begin. Our AI will analyze your document in seconds.
+                        </p>
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: #e0e1dd; flex-wrap: wrap;">
+                            <i class="fas fa-check-circle" style="color: #4ade80;"></i>
+                            <span>Secure & encrypted</span>
+                            <i class="fas fa-check-circle" style="color: #4ade80; margin-left: 15px;"></i>
+                            <span>Supports PDF, DOCX, TXT, RTF</span>
+                            <i class="fas fa-check-circle" style="color: #4ade80; margin-left: 15px;"></i>
+                            <span>Instant analysis</span>
+                        </div>
+                    </div>
+
+                    <div class="hero-buttons">
+                        <!-- File upload form -->
+                        <form id="uploadForm" method="post" enctype="multipart/form-data" action="/analyze/" style="display: inline;">
+                            <input type="file" id="fileInput" name="document" accept=".pdf,.docx,.txt,.rtf" style="display: none;">
+                            <button type="button" class="cta-button upload-btn" id="uploadTrigger">
+                                <i class="fas fa-upload"></i> Upload Document
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Legal Document Analysis Dashboard">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Powerful Features</h2>
+                <p>Our AI analyzes legal documents with precision and provides actionable insights to save you time and reduce risk.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Risk Detection</h3>
+                    <p>Identify potential legal risks, ambiguous clauses, and non-standard terms in contracts and agreements.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-contract"></i>
+                    </div>
+                    <h3>Clause Analysis</h3>
+                    <p>Compare clauses against standard legal language and highlight deviations that may require attention.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Compliance Check</h3>
+                    <p>Ensure documents comply with relevant regulations and industry standards with automated verification.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="demo">
+        <div class="container">
+            <div class="demo-container">
+                <div class="demo-text">
+                    <h2>Try Our Document Analyzer</h2>
+                    <p>Upload a sample document to see how our AI identifies key clauses, flags potential issues, and provides actionable recommendations.</p>
+                    <p class="supported-formats"><strong>Supported formats:</strong> PDF, DOCX, TXT, RTF</p>
+
+                    <!-- Sample upload button -->
+                    <button class="cta-button" id="sampleUpload" style="margin-top: 15px;">
+                        <i class="fas fa-file-upload"></i> Try Sample Document
+                    </button>
+                </div>
+
+                <div class="demo-box">
+                    <h3>Analysis Results Preview</h3>
+                    <div class="demo-result">
+                        <div id="analysis-result">
+                            <p><strong>Document:</strong> Sample Employment Agreement</p>
+                            <p><strong>Analysis Status:</strong> <span class="status-completed">Completed</span></p>
+                            <p><strong>Key Findings:</strong></p>
+                            <ul class="findings-list">
+                                <li class="finding-good"><i class="fas fa-check-circle"></i> Non-compete clause is within standard limits</li>
+                                <li class="finding-warning"><i class="fas fa-exclamation-triangle"></i> Termination clause lacks specific notice period</li>
+                                <li class="finding-error"><i class="fas fa-times-circle"></i> Confidentiality agreement is overly broad</li>
+                                <li class="finding-good"><i class="fas fa-check-circle"></i> Intellectual property assignment is clearly defined</li>
+                                <li class="finding-warning"><i class="fas fa-exclamation-triangle"></i> Dispute resolution clause missing arbitration details</li>
+                            </ul>
+                            <p class="risk-level"><strong>Risk Level:</strong> <span class="risk-medium">Medium Risk</span></p>
+                            <p class="recommendations"><strong>Recommended Actions:</strong> Review termination and confidentiality clauses with legal counsel.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>How It Works</h2>
+                <p>Get actionable insights from your legal documents in three simple steps</p>
+            </div>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Upload Document</h3>
+                    <p>Upload your legal document in any supported format. Your data is encrypted and secure.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>AI Analysis</h3>
+                    <p>Our AI scans the document, identifies clauses, checks for risks, and compares with standards.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Review Results</h3>
+                    <p>Get a comprehensive report with highlighted issues, risk assessment, and recommendations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Start Analyzing Legal Documents with AI</h2>
+            <p>Join thousands of legal professionals, businesses, and individuals who trust SynapseLaw for fast, accurate legal document analysis.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>SynapseLaw</h3>
+                    <p>AI-powered legal document analysis for professionals and businesses.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Product</h3>
+                    <ul>
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Use Cases</a></li>
+                        <li><a href="#">API</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Security</a></li>
+                        <li><a href="#">Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="copyright">
+                <p>&copy; 2023 SynapseLaw. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for upload functionality -->
+    <script>
+        // File upload functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Main upload button
+            const uploadTrigger = document.getElementById('uploadTrigger');
+            const fileInput = document.getElementById('fileInput');
+            const uploadForm = document.getElementById('uploadForm');
+
+            if (uploadTrigger && fileInput) {
+                // When upload button is clicked, trigger file input
+                uploadTrigger.addEventListener('click', function() {
+                    fileInput.click();
+                });
+
+                // When file is selected, submit the form
+                fileInput.addEventListener('change', function() {
+                    if (this.files.length > 0) {
+                        const file = this.files[0];
+
+                        // Validate file
+                        const allowedExtensions = ['.pdf', '.docx', '.txt', '.rtf'];
+                        const maxSize = 10 * 1024 * 1024; // 10MB
+
+                        // Check extension
+                        const fileName = file.name.toLowerCase();
+                        const isValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
+
+                        if (!isValidExtension) {
+                            alert('Please upload only PDF, DOCX, TXT, or RTF files.');
+                            this.value = '';
+                            return;
+                        }
+
+                        // Check size
+                        if (file.size > maxSize) {
+                            alert('File size must be less than 10MB.');
+                            this.value = '';
+                            return;
+                        }
+
+                        // Show loading state
+                        const originalText = uploadTrigger.innerHTML;
+                        uploadTrigger.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+                        uploadTrigger.disabled = true;
+
+                        // Submit the form
+                        uploadForm.submit();
+
+                        // Reset button after 3 seconds (in case submission fails)
+                        setTimeout(() => {
+                            uploadTrigger.innerHTML = originalText;
+                            uploadTrigger.disabled = false;
+                        }, 3000);
+                    }
+                });
+            }
+
+            // Sample upload button
+            const sampleUploadBtn = document.getElementById('sampleUpload');
+            if (sampleUploadBtn) {
+                sampleUploadBtn.addEventListener('click', function() {
+                    // Show loading
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading Sample...';
+                    this.disabled = true;
+
+                    // Redirect to analysis with sample parameter
+                    window.location.href = '/analyze/?sample=true';
+
+                    // Reset button after 3 seconds
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.disabled = false;
+                    }, 3000);
+                });
+            }
+
+            // CSRF token for Django
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            // Add CSRF token to form if not present
+            const csrftoken = getCookie('csrftoken');
+            if (csrftoken && uploadForm) {
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = 'csrfmiddlewaretoken';
+                csrfInput.value = csrftoken;
+                uploadForm.appendChild(csrfInput);
+            }
+        });
+    </script>
+</body>
+</html>

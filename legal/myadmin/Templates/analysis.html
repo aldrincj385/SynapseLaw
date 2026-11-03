@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Analysis | SynapseLaw</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+        .analysis-container {
+            padding: 140px 0 40px;
+            min-height: 100vh;
+            background-color: var(--dark);
+        }
+
+        .back-button {
+            margin-bottom: 20px;
+        }
+
+        .back-button a {
+            color: var(--accent);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .loading-spinner {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .loading-text {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="logo">
+                    <i class="fas fa-balance-scale"></i>
+                    SYNAPESLAW
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="analysis-container">
+        <div class="container">
+            <div class="back-button">
+                <a href="/">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+            </div>
+
+            {% if not analysis_complete %}
+            <!-- Loading State -->
+            <div class="loading">
+                <div class="loading-spinner">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </div>
+                <h2>Analyzing Your Document</h2>
+                <p class="loading-text">Our AI is processing your document "{{ document_name }}". This may take a few moments...</p>
+                <div class="progress-bar" style="width: 100%; height: 6px; background-color: var(--border-color); border-radius: 3px; margin: 30px 0; overflow: hidden;">
+                    <div id="progressFill" style="width: 0%; height: 100%; background-color: var(--accent); transition: width 1s;"></div>
+                </div>
+                <p id="progressText" style="color: var(--gray);">Starting analysis...</p>
+            </div>
+
+            <script>
+                // Simulate analysis progress
+                let progress = 0;
+                const progressFill = document.getElementById('progressFill');
+                const progressText = document.getElementById('progressText');
+                const messages = [
+                    "Extracting text from document...",
+                    "Identifying clauses and sections...",
+                    "Checking for legal risks...",
+                    "Analyzing compliance...",
+                    "Generating recommendations...",
+                    "Finalizing report..."
+                ];
+
+                let messageIndex = 0;
+
+                const interval = setInterval(() => {
+                    progress += Math.random() * 15;
+                    if (progress >= 100) {
+                        progress = 100;
+                        clearInterval(interval);
+                        progressText.textContent = "Analysis complete! Redirecting...";
+
+                        // Redirect to results
+                        setTimeout(() => {
+                            window.location.href = '/analysis/?complete=true';
+                        }, 1500);
+                    } else {
+                        progressFill.style.width = progress + '%';
+
+                        // Update message every 15% progress
+                        if (progress > (messageIndex + 1) * 15 && messageIndex < messages.length - 1) {
+                            messageIndex++;
+                            progressText.textContent = messages[messageIndex];
+                        }
+                    }
+                }, 500);
+            </script>
+
+            {% else %}
+            <!-- Results will go here -->
+            <div style="background-color: var(--card-bg); padding: 30px; border-radius: 10px; border: 1px solid var(--border-color);">
+                <h2>Analysis Complete!</h2>
+                <p>Document: {{ document_name }}</p>
+                <p>Type: {{ document_type }}</p>
+                <p>Risk Level: {{ risk_level }} ({{ risk_score }}%)</p>
+                <p style="margin-top: 20px;">
+                    <a href="/" class="cta-button" style="display: inline-block;">
+                        <i class="fas fa-home"></i> Return to Home
+                    </a>
+                </p>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+</body>
+</html>

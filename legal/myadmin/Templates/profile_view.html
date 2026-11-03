@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f6f7fb; margin: 0; padding: 0; }
+    .wrap { max-width: 900px; margin: 40px auto; padding: 0 16px; }
+    .card { background: #fff; border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,.08); padding: 24px; display: grid; grid-template-columns: 140px 1fr; gap: 20px; }
+    .avatar { width: 140px; height: 140px; border-radius: 50%; overflow: hidden; background: #e9ecf5; display:flex; align-items:center; justify-content:center; }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; display:block; }
+    .name { margin: 0; font-size: 26px; }
+    .meta { color: #555; margin: 6px 0; }
+    .section { margin-top: 18px; }
+    .label { font-weight: 700; margin-bottom: 6px; }
+    .btns { margin-top: 18px; display:flex; gap: 10px; flex-wrap: wrap; }
+    .btn { padding: 10px 14px; border-radius: 10px; border: 1px solid #ddd; background: #fff; text-decoration:none; color:#111; display:inline-block; }
+    .btn.primary { background: #2f6fed; border-color:#2f6fed; color:#fff; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="avatar">
+        {% if profile.profile_picture %}
+          <img src="{{ profile.profile_picture.url }}" alt="Profile picture">
+        {% else %}
+          <span>No Photo</span>
+        {% endif %}
+      </div>
+
+      <div>
+        <h1 class="name">{{ request.user.get_full_name|default:request.user.username }}</h1>
+        <p class="meta"><strong>Username:</strong> {{ request.user.username }}</p>
+        <p class="meta"><strong>Email:</strong> {{ request.user.email|default:"—" }}</p>
+
+        <div class="section">
+          <div class="label">Bio</div>
+          <div>{{ profile.bio|default:"No bio added yet." }}</div>
+        </div>
+
+        <div class="btns">
+          <!-- Replace with your real edit profile URL if you have it -->
+          <a class="btn primary" href="#">Edit Profile</a>
+          <!-- If you have logout url configured -->
+          <a class="btn" href="{% url 'logout' %}">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
